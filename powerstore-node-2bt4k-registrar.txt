@@ -1,0 +1,15 @@
+I1017 04:24:10.127771 1 main.go:135] Version: v2.10.1
+I1017 04:24:10.127859 1 main.go:136] Running node-driver-registrar in mode=
+I1017 04:24:10.127866 1 main.go:157] Attempting to open a gRPC connection with: "/csi/csi_sock"
+I1017 04:24:10.133187 1 connection.go:215] Connecting to unix:///csi/csi_sock
+I1017 04:24:14.950104 1 main.go:164] Calling CSI driver to discover driver name
+I1017 04:24:14.950146 1 connection.go:244] GRPC call: /csi.v1.Identity/GetPluginInfo
+I1017 04:24:14.950153 1 connection.go:245] GRPC request: {}
+I1017 04:24:14.982895 1 connection.go:251] GRPC response: {"manifest":{"commit":"8734a444c901414cc31539ac4f8072bcf041b4fc","formed":"Mon, 22 Jul 2024 10:12:10 UTC","semver":"2.11.0","url":"https://github.com/dell/csi-powerstore"},"name":"csi-powerstore.dellemc.com","vendor_version":"2.11.0"}
+I1017 04:24:14.982924 1 connection.go:252] GRPC error:
+I1017 04:24:14.982937 1 main.go:173] CSI driver name: "csi-powerstore.dellemc.com"
+I1017 04:24:14.982963 1 node_register.go:55] Starting Registration Server at: /registration/csi-powerstore.dellemc.com-reg.sock
+I1017 04:24:14.983251 1 node_register.go:64] Registration Server started at: /registration/csi-powerstore.dellemc.com-reg.sock
+I1017 04:24:14.983315 1 node_register.go:88] Skipping HTTP server because endpoint is set to: ""
+I1017 04:24:15.531843 1 main.go:90] Received GetInfo call: &InfoRequest{}
+I1017 04:24:24.913284 1 main.go:101] Received NotifyRegistrationStatus call: &RegistrationStatus{PluginRegistered:true,Error:,}
