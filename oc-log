@@ -1,0 +1,78 @@
+2.
+[root@tpbastion81poc dell-csm-operator-bundle]# k get pod -n powerstore -o wide
+NAME                                     READY   STATUS    RESTARTS        AGE    IP              NODE                               NOMINATED NODE   READINESS GATES
+powerstore-controller-79955b5cb6-9cqsm   5/5     Running   29 (102m ago)   129m   10.129.2.60     tpworker81poc.ocp1.kgil.     lab   <none>           <none>
+powerstore-node-2bt4k                    2/2     Running   2               129m   172.26.43.220   tpworker82poc.ocp1.kgil.     lab   <none>           <none>
+powerstore-node-vzq5g                    2/2     Running   2               129m   172.26.43.219   tpworker81poc.ocp1.kgil.     lab   <none>           <none>
+
+
+3.
+PVC.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    volume.beta.kubernetes.io/storage-provisioner: csi-powerstore.dellemc.com
+    volume.kubernetes.io/storage-provisioner: csi-powerstore.dellemc.com
+  creationTimestamp: "2024-10-17T06:11:02Z"
+  finalizers:
+  - kubernetes.io/pvc-protection
+  name: test
+  namespace: test
+  resourceVersion: "29235083"
+  uid: e723f28e-ff5a-4dd2-9565-5bdabdebd9fe
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: powerstore-xfs
+  volumeMode: Block
+status:
+  phase: Pending
+
+4. describe pvc
+[root@tpbastion81poc dell-csm-operator-bundle]# vim pvc-test-des.yaml
+Name:          test
+Namespace:     test
+StorageClass:  powerstore-xfs
+Status:        Pending
+Volume:
+Labels:        <none>
+Annotations:   volume.beta.kubernetes.io/storage-provisioner: csi-powerstore.dellemc.com
+               volume.kubernetes.io/storage-provisioner: csi-powerstore.dellemc.com
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:
+Access Modes:
+VolumeMode:    Block
+Used By:       <none>
+Events:
+  Type     Reason                Age                    From                                                                                                    Message
+  ----     ------                ----                   ----                                                                                                    -------
+  Warning  ProvisioningFailed    2m19s (x6 over 3m21s)  csi-powerstore.dellemc.com_powerstore-controller-79955b5cb6-9cqsm_7c133a1a-6c75-4e10-8c02-a1c3e973e641  failed to provision volume with StorageClass "powerstore-xfs": rpc error: code = Aborted desc = pending
+  Normal   Provisioning          75s (x8 over 3m32s)    csi-powerstore.dellemc.com_powerstore-controller-79955b5cb6-9cqsm_7c133a1a-6c75-4e10-8c02-a1c3e973e641  External provisioner is provisioning volume for claim "test/test"
+
+
+5. no pv
+
+6. 
+[root@tpbastion81poc dell-csm-operator-bundle]# oc get sc powerstore-xfs -o yaml
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"allowVolumeExpansion":true,"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{},"name":"powerstore-xfs"},"parameters":{"arrayID":"PSea7dbbb126dc","csi.storage.k8s.io/fstype":"xfs"},"provisioner":"csi-powerstore.dellemc.com","reclaimPolicy":"Delete","volumeBindingMode":"Immediate"}
+    storageclass.kubernetes.io/is-default-class: "true"
+  creationTimestamp: "2024-10-17T03:30:22Z"
+  name: powerstore-xfs
+  resourceVersion: "29083877"
+  uid: ace1322e-60a8-46a8-b02a-76cda1615232
+parameters:
+  arrayID: PSea7dbbb126dc
+  csi.storage.k8s.io/fstype: xfs
+provisioner: csi-powerstore.dellemc.com
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
